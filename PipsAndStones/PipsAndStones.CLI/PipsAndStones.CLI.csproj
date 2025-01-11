@@ -9,8 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Interfaces\" />
-      <Folder Include="Services\" />
+      <ProjectReference Include="..\PipsAndStones.LIB\PipsAndStones.LIB.csproj" />
     </ItemGroup>
 
 </Project>
