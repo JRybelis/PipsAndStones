@@ -3,7 +3,7 @@ using PipsAndStones.LIB.Models;
 
 namespace PipsAndStones.Logic.Services;
 
-public class DominoChainSolver : IDominoChainSolver
+public class DominoChainSolverService : IDominoChainSolverService
 {
     private class DominoNode(Stone stone)
     {
