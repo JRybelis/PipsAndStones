@@ -3,7 +3,7 @@ using PipsAndStones.Logic.Services;
 
 namespace PipsAndStones.Tests.Unit;
 
-public class DominoChainSolverTests
+public class DominoChainSolverServiceTests
 {
     [Theory]
     [InlineData(/* empty */)]
@@ -11,7 +11,7 @@ public class DominoChainSolverTests
     public void SolveChain_EmptyCollectionOrSingleStone_ReturnsFailureAndCallsForValidInputs(params int[] pips)
     {
         // Arrange
-        var solver = new DominoChainSolver();
+        var solver = new DominoChainSolverService();
         IEnumerable<Stone> stones = pips.Length == 0
             ? []
             : [new Stone(pips[0], pips[1])];
@@ -31,7 +31,7 @@ public class DominoChainSolverTests
     public void SolveChain_TwoOrMoreMatchingStones_ReturnsSuccessWithValidChain(params int[] pips)
     {
         // Arrange
-        var solver = new DominoChainSolver();
+        var solver = new DominoChainSolverService();
         var stones = new List<Stone>();
 
         for (var i = 0; i <pips.Length; i+= 2)
@@ -66,7 +66,7 @@ public class DominoChainSolverTests
     public void SolveChain_UnmatchableStones_ReturnsFailureAndCallsForValidInputs(params object[] parameters)
     {
         // Arrange
-        var solver = new DominoChainSolver();
+        var solver = new DominoChainSolverService();
         var stones = new List<Stone>();
         var pips = parameters.Take(parameters.Length - 1).Cast<int>().ToArray();
         var expectedMessage = (string)parameters[^1];
