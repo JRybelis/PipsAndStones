@@ -6,4 +6,8 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\PipsAndStones.LIB\PipsAndStones.LIB.csproj" />
+    </ItemGroup>
+
 </Project>
