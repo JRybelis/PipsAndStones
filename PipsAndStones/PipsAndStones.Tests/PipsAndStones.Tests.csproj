@@ -23,9 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Helpers\" />
-      <Folder Include="TestData\" />
-      <Folder Include="Unit\" />
+      <ProjectReference Include="..\PipsAndStones.LIB\PipsAndStones.LIB.csproj" />
     </ItemGroup>
 
 </Project>
