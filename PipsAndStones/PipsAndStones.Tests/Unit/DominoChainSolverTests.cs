@@ -57,14 +57,19 @@ public class DominoChainSolverTests
     }
 
     [Theory]
-    [InlineData(1, 2, 3, 4, 5, 6)] // No matching sides: (1, 2) (3, 4) (5, 6)
-    [InlineData(1, 2, 3, 1, 4, 5)] // Cannot form a circle: (1, 2) (3, 1) (4, 5)
-    [InlineData(0, 3, 3, 3, 3, 6)] // Chain ends don't match up: (0, 3) (3, 3) (3, 6)
-    public void SolveChain_UnmatchableStones_ReturnsFailureAndCallsForValidInputs(params int[] pips)
+    // No matching sides: (1, 2) (3, 4) (5, 6)
+    [InlineData(1, 2, 3, 4, 5, 6, "Unable to form a circular chain with the stones provided.")]
+    // Cannot form a circle: (1, 2) (3, 1) (4, 5)
+    [InlineData(1, 2, 3, 1, 4, 5, "Unable to form a circular chain with the stones provided.")] 
+    // Chain ends don't match up: (0, 3) (3, 3) (3, 6)
+    [InlineData(0, 3, 3, 3, 3, 6, "Unable to form a circular chain with the stones provided.")]
+    public void SolveChain_UnmatchableStones_ReturnsFailureAndCallsForValidInputs(params object[] parameters)
     {
         // Arrange
         var solver = new DominoChainSolver();
         var stones = new List<Stone>();
+        var pips = parameters.Take(parameters.Length - 1).Cast<int>().ToArray();
+        var expectedMessage = (string)parameters[^1];
 
         for (var i = 0; i < pips.Length; i += 2)
         {
@@ -76,6 +81,6 @@ public class DominoChainSolverTests
         
         // Assert
         Assert.False(result.IsSuccess() as bool?);
-        Assert.Equal("Unable to form a circular chain with the provided domino stones.", result.GetErrorMessage());
+        Assert.Equal(expectedMessage, result.GetErrorMessage());
     }
 }
