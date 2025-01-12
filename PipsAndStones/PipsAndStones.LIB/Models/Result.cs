@@ -6,7 +6,7 @@ public record Result<T>
     private readonly T? _value;
     private readonly string? _errorMessage;
 
-    public Result(bool isSuccess, T? value, string? errorMessage)
+    private Result(bool isSuccess, T? value, string? errorMessage)
     {
         _isSuccess = isSuccess;
         _value = value;
