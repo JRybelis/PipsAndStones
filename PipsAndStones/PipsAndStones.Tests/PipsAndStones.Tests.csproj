@@ -24,6 +24,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\PipsAndStones.LIB\PipsAndStones.LIB.csproj" />
+      <ProjectReference Include="..\PipsAndStones.Logic\PipsAndStones.Logic.csproj" />
     </ItemGroup>
 
 </Project>
