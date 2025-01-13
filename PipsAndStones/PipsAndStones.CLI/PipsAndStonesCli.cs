@@ -146,11 +146,24 @@ public class PipsAndStonesCli(
     {
         var createdStones = userDominoInput.DominoStonesProvided!.Select(dominoToBeCreated => 
                 new Stone(dominoToBeCreated.Item1, dominoToBeCreated.Item2));
-        var dominoChain = dominoChainSolverService.SolveChain(createdStones).ToString();
+        var result = dominoChainSolverService.SolveChain(createdStones); 
         
         writer.Write(Environment.NewLine);
-        writer.Write("Well done. Please see the successful outcome of chaining your dominoes:");
-        writer.Write($" {dominoChain}");
+
+        if (result.IsSuccess())
+        {
+            var chain = result.GetValue()!;
+            var chainDisplay = string.Join(" -> ", chain);
+            
+            writer.Write("Well done. Please see the successful outcome of chaining your dominoes:");
+            writer.Write($" {chainDisplay}");
+        }
+        else
+        {
+            writer.Write("Unable to form a chain with the provided dominoes.");
+            writer.Write($"{result.GetErrorMessage()}");
+        }
+
         writer.Write(Environment.NewLine);
     }
     
