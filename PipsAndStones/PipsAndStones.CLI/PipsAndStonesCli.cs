@@ -97,74 +97,32 @@ public class PipsAndStonesCli(
     {
         for (var i = 0; i < dominoValues.NumberOfDominoesToCreate; i++)
         {
-            while (true)
-            {
-                writer.Write($"You have {dominoValues.NumberOfDominoesToCreate - i} of domino stones for creation left to define.");
-                writer.Write("Please enter the number of pips for the next domino, separated by a comma:");
-                
-                var dominoSides = GetUserInput(UserInputType.NumberOfPips).Split(',');
-                if (dominoSides.Length != 2)
-                {
-                    writer.Write("Please provide exactly two integers, separated by a comma.");
-                    continue;
-                }
+            writer.Write($"You have {dominoValues.NumberOfDominoesToCreate - i} of domino stones for creation left to define.");
+            writer.Write("Please enter the number of pips for the next domino, separated by a comma:");
 
-                if (!int.TryParse(dominoSides[0], out var firstSide) ||
-                    !int.TryParse(dominoSides[1], out var secondSide))
-                {
-                    writer.Write("Invalid input. Please enter valid integers separated by a comma.");
-                    continue;
-                }
-
-                if (!inputValidationService.ValidateProvidedPipValue(firstSide)
-                    || !inputValidationService.ValidateProvidedPipValue(secondSide))
-                {
-                    writer.Write("Invalid pip values. Please enter a valid integers separated by a comma.");
-                    continue;
-                }
-                
-                dominoValues.DominoStonesProvided!.Add(new Tuple<int, int>(firstSide, secondSide));
-                break;
-            }
+            var input = GetUserInput(UserInputType.NumberOfPips);
+            var sides = input.Split(',').Select(int.Parse).ToArray();
+            dominoValues.DominoStonesProvided!.Add(new Tuple<int, int>(sides[0], sides[1]));
         }
     }
 
     public string GetUserInput(UserInputType userInputType)
     {
-        int maxUserInputLength;
-        int minUserInputLength;
-        var userInput = string.Empty;
-        
-        if (userInputType == UserInputType.NumberOfDominoes)
+        while (true)
         {
-            maxUserInputLength = 2;
-            minUserInputLength = 1;
-            userInput = reader.Read();
-
-            while (userInput.Length > maxUserInputLength ||
-                   userInput.Length < minUserInputLength ||
-                   int.TryParse(userInput, out _) == false)
+            var input = reader.Read();
+            var validationResult = userInputType switch
             {
-                writer.Write($"Please enter between {minUserInputLength} and {maxUserInputLength} positive digits.");
-                userInput = reader.Read();
-            }
-        }
+                UserInputType.NumberOfDominoes => inputValidationService.ValidateNumberOfDominoesInput(input),
+                UserInputType.NumberOfPips => inputValidationService.ValidateDominoPipInput(input),
+                _ => throw new ArgumentOutOfRangeException(nameof(userInputType), userInputType, null)
+            };
 
-        if (userInputType == UserInputType.NumberOfPips)
-        {
-            maxUserInputLength = 3;
-            minUserInputLength = 3;
-            userInput = reader.Read();
-
-            while (userInput.Length > maxUserInputLength ||
-                   userInput.Length < minUserInputLength)
-            {
-                writer.Write($"Please enter two integers between 0 and 6, separated by a comma.");
-                userInput = reader.Read();
-            }
+            if (validationResult.isValid)
+                return input;
+            
+            writer.Write(validationResult.errorMessage);
         }
-        
-        return userInput;
     }
 
     public bool IsUserContinuing()
